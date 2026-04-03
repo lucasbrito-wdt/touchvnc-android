@@ -448,6 +448,25 @@ Java_com_gaurav_avnc_vnc_VncClient_nativeSendPointerEvent(JNIEnv * /*env*/, jobj
 
 extern "C"
 JNIEXPORT jboolean JNICALL
+Java_com_gaurav_avnc_vnc_VncClient_nativeSendTouchEvent(JNIEnv *env, jobject /*thiz*/, jlong client_ptr,
+                                                        jbyteArray payload) {
+    auto client = (rfbClient *) client_ptr;
+    if (!client)
+        return JNI_FALSE;
+
+    jsize len = env->GetArrayLength(payload);
+    jbyte *bytes = env->GetByteArrayElements(payload, nullptr);
+    if (!bytes)
+        return JNI_FALSE;
+
+    rfbBool ok = WriteToRFBServer(client, (const char *) bytes, len);
+
+    env->ReleaseByteArrayElements(payload, bytes, JNI_ABORT);
+    return (jboolean) ok;
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
 Java_com_gaurav_avnc_vnc_VncClient_nativeSendCutText(JNIEnv *env, jobject /*thiz*/, jlong client_ptr, jbyteArray bytes,
                                                      jboolean is_utf8) {
     auto client = (rfbClient *) client_ptr;

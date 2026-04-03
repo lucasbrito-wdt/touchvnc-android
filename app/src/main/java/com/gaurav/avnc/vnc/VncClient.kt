@@ -69,6 +69,14 @@ class VncClient(private val observer: Observer) {
     var connected = false
         private set
 
+    /**
+     * Whether the server supports the touch extension (pseudo-encoding 0xFFFFFE01).
+     * Defaults to true for our custom server; non-supporting servers will
+     * gracefully ignore unknown client messages.
+     */
+    var touchSupported: Boolean = true
+        private set
+
     private var destroyed = false
 
     /**

@@ -33,7 +33,7 @@
     <string name="msg_about_app">Un client pour VNC rapide et sécurisé. Visualisez et contrôlez à distance tout appareil exécutant un serveur VNC.
 \n
 \n
-\nAVNC est un logiciel open source et copyleft - réalisé avec l\'aide de nombreux contributeurs.</string>
+\nTouchVNC est un logiciel open source et copyleft - réalisé avec l\'aide de nombreux contributeurs.</string>
     <string name="msg_server_profile_added">Serveur ajouté</string>
     <string name="msg_loading">Chargement…</string>
     <string name="msg_imported">Importé</string>
@@ -215,7 +215,7 @@
     <string name="msg_required">Requis</string>
     <string name="msg_invalid_mac_address">Adresse MAC invalide</string>
     <string name="msg_tap_to_select_a_key">Appuyez pour sélectionner une touche :</string>
-    <string name="msg_wake_on_lan_help">Wake-on-LAN peut être utilisé pour allumer un ordinateur à distance.\n\nTout d’abord, configurez WoL sur l’ordinateur distant, puis activez-le dans AVNC.\nUne fois activé, le paquet magique WoL sera automatiquement envoyé avant de se connecter à ce serveur.</string>
+    <string name="msg_wake_on_lan_help">Wake-on-LAN peut être utilisé pour allumer un ordinateur à distance.\n\nTout d’abord, configurez WoL sur l’ordinateur distant, puis activez-le dans TouchVNC.\nUne fois activé, le paquet magique WoL sera automatiquement envoyé avant de se connecter à ce serveur.</string>
     <string name="msg_viewer_tips_label">Quelques conseils pour commencer</string>
     <string name="tip_toolbar_usage">Balayez depuis le bord pour ouvrir la barre d’outils. Utilisez-la pour ouvrir le clavier, changer le style de geste ou réinitialiser le zoom.</string>
     <string name="tip_session_end">Pour mettre fin à une session, appuyez sur le bouton de navigation Retour, comme si vous reveniez d’une vidéo en cours de lecture.</string>

@@ -12,11 +12,11 @@
 
     <data>
 
-        <import type="com.gaurav.avnc.viewmodel.VncViewModel.State" />
+        <import type="com.touchvnc.app.viewmodel.VncViewModel.State" />
 
         <variable
             name="viewModel"
-            type="com.gaurav.avnc.viewmodel.VncViewModel" />
+            type="com.touchvnc.app.viewmodel.VncViewModel" />
     </data>
 
     <!--
@@ -48,7 +48,7 @@
                 android:layout_height="match_parent">
 
                 <!--FrameView-->
-                <com.gaurav.avnc.ui.vnc.FrameView
+                <com.touchvnc.app.ui.vnc.FrameView
                     android:id="@+id/frame_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

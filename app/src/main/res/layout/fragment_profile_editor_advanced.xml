@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="com.gaurav.avnc.viewmodel.EditorViewModel" />
+            type="com.touchvnc.app.viewmodel.EditorViewModel" />
     </data>
 
     <LinearLayout
@@ -277,7 +277,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/gesture_style" />
 
-                <com.gaurav.avnc.util.SpinnerEx
+                <com.touchvnc.app.util.SpinnerEx
                     android:id="@+id/gesture_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -302,7 +302,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/screen_orientation" />
 
-                <com.gaurav.avnc.util.SpinnerEx
+                <com.touchvnc.app.util.SpinnerEx
                     android:id="@+id/screen_orientation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -329,7 +329,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/security" />
 
-                <com.gaurav.avnc.util.SpinnerEx
+                <com.touchvnc.app.util.SpinnerEx
                     android:id="@+id/security"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

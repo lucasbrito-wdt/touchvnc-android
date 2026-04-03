@@ -12,10 +12,10 @@
 
     <data>
 
-        <import type="com.gaurav.avnc.model.ServerProfile" />
+        <import type="com.touchvnc.app.model.ServerProfile" />
         <variable
             name="viewModel"
-            type="com.gaurav.avnc.viewmodel.VncViewModel" />
+            type="com.touchvnc.app.viewmodel.VncViewModel" />
     </data>
 
     <FrameLayout

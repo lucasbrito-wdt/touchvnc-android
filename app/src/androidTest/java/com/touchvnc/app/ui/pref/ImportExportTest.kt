@@ -1,0 +1,164 @@
+/*
+ * Copyright (c) 2022  Gaurav Ujjwal.
+ *
+ * SPDX-License-Identifier:  GPL-3.0-or-later
+ *
+ * See COPYING.txt for more details.
+ */
+
+package com.touchvnc.app.ui.pref
+
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import androidx.core.net.toUri
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.filters.SdkSuppress
+import com.touchvnc.app.BiometricMocking
+import com.touchvnc.app.R
+import com.touchvnc.app.checkIsDisplayed
+import com.touchvnc.app.checkIsNotDisplayed
+import com.touchvnc.app.checkWillBeDisplayed
+import com.touchvnc.app.doClick
+import com.touchvnc.app.instrumentation
+import com.touchvnc.app.model.ServerProfile
+import com.touchvnc.app.model.db.MainDb
+import com.touchvnc.app.setupFileOpenIntent
+import com.touchvnc.app.targetContext
+import com.touchvnc.app.ui.prefs.PrefsActivity
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import java.io.File
+
+class ImportExportTest {
+    @Rule
+    @JvmField
+    val activityRule = ActivityScenarioRule(PrefsActivity::class.java)
+
+    @Before
+    fun openImportExportScreen() {
+        onView(withText(R.string.pref_tools)).doClick()
+        onView(withText(R.string.pref_import_export)).doClick()
+        onView(withText(R.string.title_import)).checkIsDisplayed()
+        onView(withText(R.string.title_export)).checkIsDisplayed()
+    }
+
+    @Before
+    fun initIntents() = Intents.init()
+
+    @After
+    fun releaseIntents() = Intents.release()
+
+
+    @Test
+    @SdkSuppress(minSdkVersion = 28)
+    fun exportWithoutSecrets() {
+        // Insert sample data
+        val sampleName = "Days of our Lives"
+        val sampleSecret = "Drake Ramoray"
+        val profile = ServerProfile(name = sampleName, password = sampleSecret, sshPassword = sampleSecret, sshPrivateKey = sampleSecret)
+        runBlocking { MainDb.getInstance(targetContext).serverProfileDao.save(profile) }
+
+        // Setup export file
+        val file = File.createTempFile("avnc", "test")
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_CREATE_DOCUMENT))
+                .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent().setData(file.toUri())))
+
+        // Export
+        BiometricMocking.start()
+        onView(withText(R.string.title_export)).doClick()
+        BiometricMocking.endWithSuccess()
+        onView(withText(R.string.msg_exported)).checkWillBeDisplayed()
+        onView(withSubstring("Error")).checkIsNotDisplayed()
+
+        // Verify exported data
+        instrumentation.waitForIdleSync()
+        val data = file.bufferedReader().use { it.readText() }
+        Assert.assertTrue("Exported data: `$data` should contain `$sampleName`", data.contains(sampleName))
+        Assert.assertFalse("Exported data: `$data` should not contain `$sampleSecret`", data.contains(sampleSecret))
+    }
+
+
+    @Test
+    @SdkSuppress(minSdkVersion = 28)
+    fun exportWithSecrets() {
+        // Insert sample data
+        val sampleName = "Days of our Lives"
+        val sampleSecret = "Drake Ramoray"
+        val profile = ServerProfile(name = sampleName, password = sampleSecret, sshPassword = sampleSecret, sshPrivateKey = sampleSecret)
+        runBlocking { MainDb.getInstance(targetContext).serverProfileDao.save(profile) }
+
+        // Setup export file
+        val file = File.createTempFile("avnc", "test")
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_CREATE_DOCUMENT))
+                .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent().setData(file.toUri())))
+
+        // Export
+        BiometricMocking.start()
+        onView(withText(R.string.title_export_passwords_and_keys)).doClick() // Check
+        onView(withText(R.string.title_export)).doClick()
+        BiometricMocking.endWithSuccess()
+        onView(withText(R.string.msg_exported)).checkWillBeDisplayed()
+        onView(withSubstring("Error")).checkIsNotDisplayed()
+
+        // Verify exported data
+        instrumentation.waitForIdleSync()
+        val data = file.bufferedReader().use { it.readText() }
+        Assert.assertTrue("Exported data: `$data` should contain `$sampleName`", data.contains(sampleName))
+        Assert.assertTrue("Exported data: `$data` should contain `$sampleSecret`", data.contains(sampleSecret))
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 28)
+    fun exportFailsOnIncorrectBiometric() {
+        BiometricMocking.start()
+        onView(withText(R.string.title_export_passwords_and_keys)).doClick()
+        onView(withText(R.string.title_export)).doClick()
+
+        val errorMessage = "You shall not pass!!!"
+        BiometricMocking.endWithError(errorMessage)
+        onView(withSubstring(errorMessage)).checkWillBeDisplayed()
+        onView(withText(R.string.msg_exported)).check(doesNotExist())
+        Intents.assertNoUnverifiedIntents()
+    }
+
+    @Test
+    fun missingFilePickerApp() {
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_CREATE_DOCUMENT))
+                .respondWithFunction { throw ActivityNotFoundException() }
+
+        onView(withText(R.string.title_export)).doClick()
+        onView(withSubstring("No app found to choose backup file")).checkWillBeDisplayed()
+    }
+
+
+    @Test
+    fun importTest() {
+        val sampleName = "Joey Tribbiani"
+        val sampleJson = """{ "profiles": [{ "name": "$sampleName" }]}"""
+        setupFileOpenIntent(sampleJson)
+
+        // Import
+        onView(withText(R.string.title_delete_servers_before_import)).doClick()
+        onView(withText(R.string.title_import)).doClick()
+        onView(withText(R.string.msg_imported)).checkWillBeDisplayed()
+        onView(withSubstring("Error")).checkIsNotDisplayed()
+
+        // Verify imported data
+        instrumentation.waitForIdleSync()
+        val profiles = runBlocking { MainDb.getInstance(targetContext).serverProfileDao.getList() }
+        Assert.assertEquals(1, profiles.size)
+        Assert.assertEquals(sampleName, profiles.first().name)
+    }
+}

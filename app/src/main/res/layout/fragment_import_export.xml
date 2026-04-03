@@ -14,13 +14,13 @@
 
         <variable
             name="viewModel"
-            type="com.gaurav.avnc.viewmodel.PrefsViewModel" />
+            type="com.touchvnc.app.viewmodel.PrefsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.gaurav.avnc.ui.backup.BackupActivity">
+        tools:context="com.touchvnc.app.ui.backup.BackupActivity">
 
         <Button
             android:id="@+id/export_btn"

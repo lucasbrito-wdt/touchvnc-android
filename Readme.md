@@ -1,8 +1,8 @@
 
-<p align="center"><img src="metadata/en-US/branding/wordmark.svg" alt="AVNC Banner" height="200"></img></a>
+<p align="center"><img src="metadata/en-US/branding/wordmark.svg" alt="TouchVNC Banner" height="200"></img></a>
 
 
-<p align="center"> <b>AVNC</b> is a VNC client for Android. </p>
+<p align="center"> <b>TouchVNC</b> is a VNC client for Android. </p>
 
 -------------------------------------------------------------------------------
 
@@ -25,8 +25,8 @@
 - Tight encoding support
 
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/com.gaurav.avnc/)
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Play Store" height="80">](https://play.google.com/store/apps/details?id=com.gaurav.avnc)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/com.touchvnc.app/)
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Play Store" height="80">](https://play.google.com/store/apps/details?id=com.touchvnc.app)
 
 ### Screenshots
 
@@ -60,19 +60,19 @@ git submodule update --init --depth 1
 
 Now you can import the project in Android Studio, or build it directly from terminal.
 
-Read [Architecture.kt](app/src/main/java/com/gaurav/avnc/Architecture.kt) (preferably in
+Read [Architecture.kt](app/src/main/java/com/touchvnc/app/Architecture.kt) (preferably in
 Android Studio) to know more about the code.
 
 
 ##
-You can translate AVNC on [Weblate](https://hosted.weblate.org/engage/avnc/).
+You can translate TouchVNC on [Weblate](https://hosted.weblate.org/engage/avnc/).
 
 [<img src="https://hosted.weblate.org/widgets/avnc/-/open-graph.png" alt="Translation status" height="200" />](https://hosted.weblate.org/engage/avnc/)
 
 
 ## Credits
 
-- Authors of libraries AVNC depends on (LibVNCClient, libjpeg-turbo, wolfSSL, sshlib, leakcanary etc.)
+- Authors of libraries TouchVNC depends on (LibVNCClient, libjpeg-turbo, wolfSSL, sshlib, leakcanary etc.)
 - Contributors for reporting issues, providing fixes
-- Contributors for translating AVNC, and [Weblate](https://weblate.org/) for translation hosting
+- Contributors for translating TouchVNC, and [Weblate](https://weblate.org/) for translation hosting
 - [Browserstack](https://www.browserstack.com/) for providing testing infrastructure

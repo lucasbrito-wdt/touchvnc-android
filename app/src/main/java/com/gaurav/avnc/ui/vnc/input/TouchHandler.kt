@@ -20,6 +20,7 @@ import android.view.ScaleGestureDetector
 import android.view.ViewConfiguration
 import com.gaurav.avnc.ui.vnc.FrameView
 import com.gaurav.avnc.util.AppPreferences
+import com.gaurav.avnc.viewmodel.VncViewModel
 import com.gaurav.avnc.vnc.PointerButton
 import kotlin.math.PI
 import kotlin.math.abs
@@ -29,8 +30,11 @@ import kotlin.math.max
 /**
  * Handler for touch events. It detects various gestures and notifies [dispatcher].
  */
-class TouchHandler(private val frameView: FrameView, private val dispatcher: Dispatcher, private val pref: AppPreferences)
+class TouchHandler(private val frameView: FrameView, private val dispatcher: Dispatcher, private val pref: AppPreferences, viewModel: VncViewModel)
     : ScaleGestureDetector.OnScaleGestureListener {
+
+    private val touchPassthrough: TouchPassthroughMode? =
+        if (viewModel.client?.touchSupported == true) TouchPassthroughMode(viewModel) else null
 
     //Extension to easily access touch position
     private fun MotionEvent.point() = PointF(x, y)
@@ -44,6 +48,9 @@ class TouchHandler(private val frameView: FrameView, private val dispatcher: Dis
      ****************************************************************************************/
 
     fun onTouchEvent(event: MotionEvent): Boolean {
+        if (touchPassthrough != null && touchPassthrough.onTouchEvent(event))
+            return true
+
         val handled = handleStylusEvent(event) || handleMouseEvent(event) || handleGestureEvent(event)
         handleGestureStartStop(event)
         return handled

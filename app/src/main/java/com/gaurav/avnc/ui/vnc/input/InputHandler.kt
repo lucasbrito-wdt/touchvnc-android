@@ -34,7 +34,7 @@ class InputHandler(private val activity: VncActivity) {
         if (isConnected) {
             val viewModel = activity.viewModel
             dispatcher = Dispatcher(activity)
-            touchHandler = TouchHandler(activity.binding.frameView, dispatcher!!, viewModel.pref)
+            touchHandler = TouchHandler(activity.binding.frameView, dispatcher!!, viewModel.pref, viewModel)
             keyHandler = KeyHandler(dispatcher!!, viewModel.pref)
         } else {
             dispatcher = null

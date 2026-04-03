@@ -206,6 +206,37 @@ class VncClient(private val observer: Observer) {
     }
 
     /**
+     * Sends touch event to remote server using custom RFB extension.
+     * Message format: type=255, subtype=0x54 ('T'), followed by per-slot data.
+     */
+    fun sendTouchEvent(slots: List<TouchSlot>): Boolean {
+        val numSlots = slots.size.coerceAtMost(10)
+        val payload = ByteArray(4 + numSlots * 8)
+
+        // Header
+        payload[0] = 0xFF.toByte()  // type 255
+        payload[1] = 0x54           // subtype 'T'
+        payload[2] = numSlots.toByte()
+        payload[3] = 0              // padding
+
+        // Slots (big-endian for x, y, pressure)
+        for (i in 0 until numSlots) {
+            val offset = 4 + i * 8
+            val slot = slots[i]
+            payload[offset + 0] = slot.id.toByte()
+            payload[offset + 1] = slot.type.toByte()
+            payload[offset + 2] = (slot.x shr 8).toByte()
+            payload[offset + 3] = (slot.x and 0xFF).toByte()
+            payload[offset + 4] = (slot.y shr 8).toByte()
+            payload[offset + 5] = (slot.y and 0xFF).toByte()
+            payload[offset + 6] = (slot.pressure shr 8).toByte()
+            payload[offset + 7] = (slot.pressure and 0xFF).toByte()
+        }
+
+        return nativeSendTouchEvent(nativePtr, payload)
+    }
+
+    /**
      * Updates client-side pointer position.
      * No event is sent to server.
      *
@@ -351,6 +382,7 @@ class VncClient(private val observer: Observer) {
     private external fun nativeProcessServerMessage(clientPtr: Long): Boolean
     private external fun nativeSendKeyEvent(clientPtr: Long, keySym: Int, xtCode: Int, isDown: Boolean): Boolean
     private external fun nativeSendPointerEvent(clientPtr: Long, x: Int, y: Int, mask: Int): Boolean
+    private external fun nativeSendTouchEvent(clientPtr: Long, payload: ByteArray): Boolean
     private external fun nativeSendCutText(clientPtr: Long, bytes: ByteArray, isUTF8: Boolean): Boolean
     private external fun nativeIsUTF8CutTextSupported(clientPtr: Long): Boolean
     private external fun nativeSetDesktopSize(clientPtr: Long, width: Int, height: Int): Boolean

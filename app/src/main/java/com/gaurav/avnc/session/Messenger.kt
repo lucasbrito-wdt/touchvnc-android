@@ -11,6 +11,7 @@ package com.gaurav.avnc.session
 import android.graphics.PointF
 import android.util.Log
 import com.gaurav.avnc.vnc.PointerButton
+import com.gaurav.avnc.vnc.TouchSlot
 import com.gaurav.avnc.vnc.VncClient
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -82,6 +83,10 @@ class Messenger(private val client: VncClient) {
 
     fun sendKey(keySym: Int, xtCode: Int, isDown: Boolean): Boolean {
         return execute { client.sendKeyEvent(keySym, xtCode, isDown) }
+    }
+
+    fun sendTouchEvent(slots: List<TouchSlot>) {
+        execute { client.sendTouchEvent(slots) }
     }
 
     fun insertButtonUpDelay() {

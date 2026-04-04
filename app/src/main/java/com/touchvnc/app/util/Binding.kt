@@ -14,7 +14,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -33,7 +32,7 @@ fun invisibilityAdapter(view: View, isInvisible: Boolean) {
 }
 
 @BindingAdapter("backgroundAlpha")
-fun backgroundAlphaAdapter(view: View, alpha: Double) {
+fun backgroundAlphaAdapter(view: View, alpha: Float) {
     view.background?.alpha = (alpha * 255).toInt().coerceIn(0, 255)
 }
 
@@ -42,7 +41,7 @@ fun backgroundAlphaAdapter(view: View, alpha: Double) {
  * But this adapter also reduces the alpha value of the view when disabled.
  */
 @BindingAdapter("isEnabled")
-fun isEnabledAdapter(view: TextView, isEnabled: Boolean) {
+fun isEnabledAdapter(view: View, isEnabled: Boolean) {
     view.isEnabled = isEnabled
     view.alpha = if (isEnabled) 1f else .38f
 }

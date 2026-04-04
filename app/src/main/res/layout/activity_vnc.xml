@@ -71,7 +71,7 @@
                     android:contentDescription="@string/desc_toolbar_btn"
                     android:src="@drawable/ic_toolbar_open"
                     android:visibility="gone"
-                    app:backgroundAlpha="@{.5}" />
+                    app:backgroundAlpha="@{0.5f}" />
 
                 <!--Virtual keys-->
                 <ViewStub
